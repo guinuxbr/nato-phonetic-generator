@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NATO Phonetic Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<div class="wrapper">
+    <section class="section">
+        <div class="container has-text-centered">
+            <h1 class="title">
+                NATO Phonetic Generator
+            </h1>
+            <p class="subtitle">
+                Convert text to the phonetic <strong>NATO</strong> alphabet!
+            </p>
+        </div>
+        <div class="columns is-centered my-6">
+            <div class="column is-half">
+                <div class="field">
+                    <label class="label">Type the text to be converted</label>
+                    <div class="control">
+                        <input class="input is-primary" id="text-to-convert" type="text"
+                            placeholder="Text to be converted">
+                    </div>
+                </div>
+
+                <button class="button is-primary" type="submit" id="convert-btn">Convert</button>
+
+                <div class="field mt-6">
+                    <label class="label">Converted text</label>
+                    <div class="card">
+                        <div class="card-content">
+                          <div class="content has-text-grey-light" id="converted-text-p">
+                            Converted text will appear here
+                          </div>
+                        </div>
+                      </div>
+                </div>
+                <div class="modal" id="modal-message">
+                    <div class="modal-background"></div>
+                    <div class="modal-card">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Something is wrong!</p>
+                            <button class="delete" id="modal-close" aria-label="close"></button>
+                        </header>
+                        <section class="modal-card-body">
+                            <p>
+                                Please, check your input and try again.
+                            </p>
+                        </section>
+                        <footer class="modal-card-foot">
+                        </footer>
+                    </div>
+                  </div>
+                <button class="modal-close is-large" id="modal-close" aria-label="close"></button>
+            </div>
+        </div>
+</div>
+</div>
+<div class="footer has-background-primary" id="ovrd-footer">
+    <div class="content has-text-centered">
+        <a href="https://github.com/guinuxbr/" target="_blank"><i
+                class="fab fa-github has-text-white is-size-4"></i></a>
+        <a href="https://twitter.com/gllmarques" target="_blank"><i
+                class="fab fa-twitter has-text-white is-size-4"></i></a>
+        <a href="https://www.linkedin.com/in/gllmarques/" target="_blank"><i
+                class="fab fa-linkedin has-text-white is-size-4"></i></a>
+        <a href="https://www.instagram.com/gll.marques" target="_blank"><i
+                class="fab fa-instagram has-text-white is-size-4"></i></a><br>
+        <a class="has-text-white" href="https://guinuxbr.com" target="_blank">GuinuxBR</a>
+
+    </div>
+</div>
+</section>
+</div>
+
+<!-- JavaScript -->
+<script src="js/script.js"></script>
+</body>
+
+</html>
