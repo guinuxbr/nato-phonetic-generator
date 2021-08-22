@@ -16,7 +16,7 @@ This is a simple JavaScript app that converts text into a phonetic NATO alphabet
 
 There are no prerequisites. Just go to the URL and start converting
 
-## Using Infinite Dogs
+## Using NATO Phonetic Generator
 
 Just browse to: https://natogenerator.netlify.app/
 
