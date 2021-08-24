@@ -45,6 +45,10 @@ function convert() {
         modalMessage.classList.add("is-active");
     } else {
         let convertedText = document.querySelector("#converted-text-p");
+
+        convertedText.classList.remove("has-text-grey-light");
+        convertedText.classList.add("has-text-black");
+        
         convertedText.innerHTML = "";
 
         for (let index = 0; index < textToConvert.length; index++) {
