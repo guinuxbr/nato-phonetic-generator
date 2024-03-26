@@ -27,7 +27,7 @@ To contribute to NATO Phonetic Generator, follow these steps:
 1. Fork this repository.
 2. Create a branch: `git checkout -b <branch_name>`.
 3. Make your changes and commit them: `git commit -m '<commit_message>'`
-4. Push to the original branch: `git push origin infinite-dogs/<location>`
+4. Push to the original branch: `git push origin nato-phonetic-generator/<location>`
 5. Create the pull request.
 
 Alternatively, see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
@@ -38,8 +38,8 @@ Alternatively, see the GitHub documentation on [creating a pull request](https:/
 
 ## Contact
 
-If you want to contact me you can send an email to guinuxbr@gmail.com.
+If you want to contact me you can email <guinuxbr@gmail.com>.
 
-## License
+## Licence
 
-This project uses the following license: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
+This project uses the following licence: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
