@@ -1,83 +1,141 @@
-document.querySelector("#text-to-convert").value = "";
-document.querySelector("#converted-text-p").value = "";
-let convertBtn = document.querySelector("#convert-btn");
-let clearBtn = document.querySelector("#clear-btn");
-let modalMessage = document.querySelector("#modal-message");
-let modalClose = document.querySelector("#modal-close");
+document.addEventListener('DOMContentLoaded', () => {
+    const textToConvertInput = document.querySelector("#text-to-convert");
+    const convertedTextP = document.querySelector("#converted-text-p");
+    const convertBtn = document.querySelector("#convert-btn");
+    const clearBtn = document.querySelector("#clear-btn");
+    const speakBtn = document.querySelector("#speak-btn");
+    const modalMessage = document.querySelector("#modal-message");
+    const modalClose = document.querySelector("#modal-close");
+    const rateSlider = document.querySelector("#rate-slider");
+    const themeSwitcher = document.querySelector("#theme-switcher");
 
-let alphabet = {
-  "a": "alpha",
-  "b": "bravo",
-  "c": "charlie",
-  "d": "delta",
-  "e": "echo",
-  "f": "foxtrot",
-  "g": "golf",
-  "h": "hotel",
-  "i": "india",
-  "j": "juliet",
-  "k": "kilo",
-  "l": "lima",
-  "m": "mike",
-  "n": "november",
-  "o": "oscar",
-  "p": "papa",
-  "q": "quebec",
-  "r": "romeo",
-  "s": "sierra",
-  "t": "tango",
-  "u": "uniform",
-  "v": "victor",
-  "w": "whisky",
-  "x": "xray",
-  "y": "yankee",
-  "z": "zulu",
-};
+    textToConvertInput.value = "";
+    convertedTextP.value = "";
 
-convertBtn.addEventListener("click", convert);
-clearBtn.addEventListener("click", clear);
+    const alphabet = {
+        "a": "alpha",
+        "b": "bravo",
+        "c": "charlie",
+        "d": "delta",
+        "e": "echo",
+        "f": "foxtrot",
+        "g": "golf",
+        "h": "hotel",
+        "i": "india",
+        "j": "juliet",
+        "k": "kilo",
+        "l": "lima",
+        "m": "mike",
+        "n": "november",
+        "o": "oscar",
+        "p": "papa",
+        "q": "quebec",
+        "r": "romeo",
+        "s": "sierra",
+        "t": "tango",
+        "u": "uniform",
+        "v": "victor",
+        "w": "whisky",
+        "x": "xray",
+        "y": "yankee",
+        "z": "zulu",
+    };
 
-modalClose.addEventListener("click", function() {
-    modalMessage.classList.remove("is-active")  
-});
+    const specialChars = {
+        ' ': ' (space) ',
+        '@': ' (at) ',
+        '-': ' (hyphen) ',
+        '_': ' (underscore) ',
+        '.': ' (dot) ',
+    };
 
-function convert() {
-    const textToConvert = document.querySelector("#text-to-convert").value;
-    if (textToConvert === "") {
-        modalMessage.classList.add("is-active");
-    } else {
-        let convertedText = document.querySelector("#converted-text-p");
+    function convert() {
+        const textToConvert = textToConvertInput.value;
+        if (textToConvert === "") {
+            modalMessage.classList.add("is-active");
+            return;
+        }
 
-        convertedText.classList.remove("has-text-grey-light");
-        convertedText.classList.add("has-text-black");
-        
-        convertedText.innerHTML = "";
-
-        for (let index = 0; index < textToConvert.length; index++) {
-            const letter = textToConvert.charAt(index).toLowerCase();
-
-            if (letter in alphabet) {
-                firstLetter = alphabet[letter].charAt(0).bold().toUpperCase().fontcolor("#00d1b2");
-                convertedText.innerHTML += `${firstLetter}${alphabet[letter].slice(1)} `;
-            } else if (letter === " ") {
-                convertedText.innerHTML += ` (space) `;
-            } else if (letter === "@") {
-                convertedText.innerHTML += ` (at) `;
-            } else if (letter === "-") {
-                convertedText.innerHTML += ` (hyphen) `;
-            } else if (letter === "_") {
-                convertedText.innerHTML += ` (underscore) `;
-            } else if (letter === ".") {
-                convertedText.innerHTML += ` (dot) `;
+        let convertedHtml = "";
+        for (const char of textToConvert) {
+            const lowerChar = char.toLowerCase();
+            if (alphabet[lowerChar]) {
+                const word = alphabet[lowerChar];
+                convertedHtml += `<span class="first-letter">${word.charAt(0).toUpperCase()}</span>${word.slice(1)} `;
+            } else if (specialChars[lowerChar]) {
+                convertedHtml += specialChars[lowerChar];
             } else {
-                convertedText.innerHTML += `${letter}`;
+                convertedHtml += char;
             }
         }
+
+        convertedTextP.innerHTML = convertedHtml;
+        convertedTextP.classList.remove("has-text-grey-light");
     }
-}
 
+    function clear() {
+        textToConvertInput.value = "";
+        convertedTextP.innerHTML = "Converted text will appear here";
+        convertedTextP.classList.add("has-text-grey-light");
+    }
 
-function clear() {
-    // Clear the text fields by refreshing the page
-    window.location.reload();
-}
+    function speak() {
+        speechSynthesis.cancel();
+        const text = convertedTextP.innerText;
+        const words = text.split(" ").filter(word => word.length > 0);
+        let i = 0;
+        const rate = rateSlider.value;
+
+        function speakWord() {
+            if (i < words.length) {
+                const utterance = new SpeechSynthesisUtterance(words[i]);
+                utterance.rate = rate;
+                utterance.onend = function () {
+                    i++;
+                    setTimeout(function () {
+                        speakWord();
+                    }, 200); // 200ms pause
+                };
+                speechSynthesis.speak(utterance);
+            }
+        }
+        speakWord();
+    }
+
+    function applyTheme(theme) {
+        if (theme === 'system') {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+    }
+
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'system';
+        themeSwitcher.value = savedTheme;
+        applyTheme(savedTheme);
+    }
+
+    convertBtn.addEventListener("click", convert);
+    clearBtn.addEventListener("click", clear);
+    speakBtn.addEventListener("click", speak);
+
+    modalClose.addEventListener("click", function () {
+        modalMessage.classList.remove("is-active");
+    });
+
+    themeSwitcher.addEventListener('change', function () {
+        const selectedTheme = themeSwitcher.value;
+        localStorage.setItem('theme', selectedTheme);
+        applyTheme(selectedTheme);
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (themeSwitcher.value === 'system') {
+            applyTheme('system');
+        }
+    });
+
+    initTheme();
+});

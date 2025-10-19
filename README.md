@@ -8,6 +8,13 @@
 
 This is a simple JavaScript app that converts text into a phonetic NATO alphabet output. It is useful when you have to spell a word to someone that does not understand you.
 
+## Features
+
+*   Converts text to the NATO phonetic alphabet.
+*   Text-to-speech functionality to speak the converted text.
+*   Adjustable speech rate.
+*   Light and dark theme options, with system theme detection.
+
 ## Screenshot
 
 ![screenshot](./screenshot.png)

@@ -1,3 +1,15 @@
+:root {
+    --primary-color: #00d1b2;
+    --text-color: #4a4a4a;
+    --converted-text-color: #000;
+}
+
+html[data-theme='dark'] {
+    --primary-color: #00d1b2;
+    --text-color: #fff;
+    --converted-text-color: #fff;
+}
+
 body {
     display: flex;
     min-height: 100vh;
@@ -9,5 +21,48 @@ body {
 }
 
 #ovrd-footer {
-    padding: 10px;
+    padding: 20px;
+}
+
+.first-letter {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#converted-text-p {
+    color: var(--converted-text-color);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.social-media {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.speak-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.speak-container .field {
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .speak-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
 }
