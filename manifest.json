@@ -1,0 +1,29 @@
+{
+  "name": "NATO Phonetic Generator",
+  "short_name": "NATO Phonetic",
+  "description": "Convert text into the official NATO phonetic alphabet with audio speech pronunciation, Morse code, reference charts, and offline capability.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b121c",
+  "theme_color": "#00d1b2",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

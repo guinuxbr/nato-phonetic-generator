@@ -1,127 +1,361 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB" data-theme="system">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A simple tool to convert text to the NATO phonetic alphabet.">
-    <title>NATO Phonetic Generator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NATO Phonetic Generator - ICAO / ITU Spelling & Speech</title>
+    <meta name="description" content="Instantly convert text, callsigns, and codes into the official NATO / ICAO phonetic alphabet with audio speech pronunciation, Morse code, reference charts, and offline PWA capability.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://natogenerator.guinuxbr.com/">
+    <meta property="og:title" content="NATO Phonetic Generator - ICAO / ITU Spelling & Speech">
+    <meta property="og:description" content="Instantly convert text into the official NATO phonetic alphabet with speech pronunciation and Morse code.">
+    <meta property="og:image" content="screenshot.png">
+
+    <!-- X (Twitter) Cards -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://natogenerator.guinuxbr.com/">
+    <meta property="twitter:title" content="NATO Phonetic Generator - ICAO / ITU Spelling & Speech">
+    <meta property="twitter:description" content="Instantly convert text into the official NATO phonetic alphabet with speech pronunciation and Morse code.">
+    <meta property="twitter:image" content="screenshot.png">
+
+    <!-- Favicon & PWA -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="img/icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00d1b2">
+
+    <!-- Google Fonts & Font Awesome 6.7.2 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <div class="wrapper">
-        <main>
-            <section class="section">
-                <div class="container has-text-centered">
-                    <h1 class="title">
-                        NATO Phonetic Generator
+        <!-- Header -->
+        <header class="header">
+            <div class="header-container">
+                <a href="./" class="brand" aria-label="NATO Phonetic Generator Home">
+                    <img class="brand-icon" src="img/nato_badge.png" alt="NATO Radiotelephony emblem" width="44" height="44">
+                    <div class="brand-text">
+                        <span class="brand-title">NATO Phonetic Generator</span>
+                        <span class="brand-subtitle">ICAO / ITU Spelling & Speech</span>
+                    </div>
+                </a>
+
+                <nav class="header-nav" aria-label="Header Tools">
+                    <button id="btn-chart-toggle" class="btn-header-icon" title="Alphabet Reference Chart (A)" aria-label="Alphabet Reference Chart">
+                        <i class="fa-solid fa-table-list"></i>
+                    </button>
+                    <button id="btn-history-toggle" class="btn-header-icon" title="Saved Favourites (H)" aria-label="View Saved Favourites">
+                        <i class="fa-solid fa-bookmark"></i>
+                        <span id="history-badge" class="badge-count" style="display: none;">0</span>
+                    </button>
+                    <button id="btn-theme-toggle" class="btn-header-icon" title="Toggle Light/Dark Theme (T)" aria-label="Toggle theme">
+                        <i class="fa-solid fa-moon" id="icon-theme"></i>
+                    </button>
+                    <button id="btn-shortcuts-toggle" class="btn-header-icon" title="Keyboard Shortcuts (?)" aria-label="Keyboard Shortcuts">
+                        <i class="fa-solid fa-keyboard"></i>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Hero Section -->
+                <section class="hero-banner">
+                    <h1 class="hero-title">
+                        Spell Clearly with <span class="highlight">NATO Phonetics</span>
                     </h1>
-                    <p class="subtitle">
-                        Convert text to the phonetic <strong>NATO</strong> alphabet!
+                    <p class="hero-description">
+                        Convert any text, callsign, or code into the international radiotelephony spelling alphabet with synchronized audio pronunciation and Morse code.
                     </p>
-                </div>
-                <div class="columns is-centered my-6">
-                    <div class="column is-half">
-                        <div class="field">
-                            <label class="label">Type the text to be converted</label>
-                            <div class="control">
-                                <input class="input is-primary" id="text-to-convert" type="text"
-                                    placeholder="Text to be converted">
+                </section>
+
+                <!-- Generator Deck Card -->
+                <section class="generator-card" aria-label="Phonetic conversion panel">
+                    <!-- Input Section -->
+                    <div class="input-section">
+                        <div class="input-label-row">
+                            <label for="input-text" class="input-label">
+                                <i class="fa-solid fa-pen-nib"></i> Text to convert:
+                            </label>
+                            <span id="char-counter" class="char-counter" aria-live="polite">0 characters</span>
+                        </div>
+
+                        <div class="input-wrapper">
+                            <input type="text" id="input-text" class="text-input"
+                                placeholder="Type text, callsign, or phrase (e.g. Flight BA1492)..."
+                                autocomplete="off" spellcheck="false" aria-label="Text to be converted">
+                            <div class="input-actions">
+                                <button type="button" id="btn-clear" class="btn-icon-input" title="Clear input (Esc)" aria-label="Clear input">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <button class="button is-primary" type="submit" id="convert-btn">Convert</button>
+                        <!-- Quick Sample Pills -->
+                        <div class="sample-pills">
+                            <span class="sample-label"><i class="fa-solid fa-bolt"></i> Quick samples:</span>
+                            <button type="button" class="btn-pill" data-sample="BRAVO-SIX">BRAVO-SIX</button>
+                            <button type="button" class="btn-pill" data-sample="DELTA-942">DELTA-942</button>
+                            <button type="button" class="btn-pill" data-sample="G4ZTR">G4ZTR</button>
+                            <button type="button" class="btn-pill" data-sample="MAYDAY">MAYDAY</button>
+                            <button type="button" class="btn-pill" data-sample="OSCAR-MIKE">OSCAR-MIKE</button>
+                        </div>
+                    </div>
 
-                        <div class="field mt-6">
-                            <label class="label">Converted text</label>
-                            <div class="card">
-                                <div class="card-content">
-                                    <div class="content has-text-grey-light" id="converted-text-p">
-                                        Converted text will appear here
-                                    </div>
-                                </div>
+                    <!-- Converted Results Display Section -->
+                    <div class="results-section">
+                        <div class="results-header">
+                            <div class="results-meta">
+                                <span class="input-label">
+                                    <i class="fa-solid fa-tower-broadcast"></i> Converted Output:
+                                </span>
+                            </div>
+
+                            <div class="view-mode-toggle" role="group" aria-label="Output display mode">
+                                <button type="button" id="btn-mode-tiles" class="btn-view-mode is-active" title="Badges view with syllable pronunciation and Morse code">
+                                    <i class="fa-solid fa-shapes"></i> Badges
+                                </button>
+                                <button type="button" id="btn-mode-plain" class="btn-view-mode" title="Plain text format for copying">
+                                    <i class="fa-solid fa-align-left"></i> Plain Text
+                                </button>
                             </div>
                         </div>
 
-                        <div class="speak-container mt-4">
-                            <button class="button is-info" type="submit" id="speak-btn">Speak</button>
-                            <div class="field">
-                                <label class="label">Speech Rate</label>
-                                <div class="control">
-                                    <input id="rate-slider" class="slider is-fullwidth" step="0.1" min="0.1" max="2"
-                                        value="1" type="range">
-                                </div>
+                        <!-- Results Card Container -->
+                        <div id="results-card" class="results-card" aria-live="polite">
+                            <!-- Populated dynamically via script.js -->
+                            <div id="results-empty" class="empty-state">
+                                <i class="fa-solid fa-headphones"></i>
+                                <p>Converted phonetic text will appear here in real-time as you type.</p>
+                            </div>
+                            <div id="tiles-container" class="phonetic-tiles-container" style="display: none;"></div>
+                            <div id="plain-container" class="plain-text-display" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Actions & Speech Bar -->
+                    <div class="actions-bar">
+                        <!-- Speech Controls Row -->
+                        <div class="speech-controls-row">
+                            <div class="speech-playback-group">
+                                <button type="button" id="btn-speak" class="btn-action btn-speak btn-primary" title="Speak converted words sequentially (S)">
+                                    <i class="fa-solid fa-play" id="icon-speak"></i>
+                                    <span id="label-speak">Listen</span>
+                                </button>
+                            </div>
+
+                            <div class="speech-rate-group">
+                                <label for="rate-slider" class="rate-label">
+                                    <i class="fa-solid fa-gauge-high"></i> Speed:
+                                </label>
+                                <input type="range" id="rate-slider" class="rate-slider" min="0.5" max="2.0" step="0.1" value="1.0" aria-label="Speech playback rate">
+                                <span id="rate-value-pill" class="rate-value-pill">1.0x</span>
                             </div>
                         </div>
-                        <button class="button is-primary mt-4" type="submit" id="clear-btn">Clear</button>
 
-                        <div class="modal" id="modal-message">
-                            <div class="modal-background"></div>
-                            <div class="modal-card ">
-                                <header class="modal-card-head has-background-danger-light">
-                                    <p class="modal-card-title has-background-danger-light">Something is wrong!</p>
-                                    <button class="delete" id="modal-close" aria-label="close"></button>
-                                </header>
-                                <section class="modal-card-body has-background-danger-light">
-                                    <p>
-                                        Please, check your input and try again.
-                                    </p>
-                                </section>
-                                <footer class="modal-card-foot has-background-danger-light">
-                                </footer>
+                        <!-- Buttons Actions Row -->
+                        <div class="btn-actions-row">
+                            <div class="actions-left">
+                                <button type="button" id="btn-copy" class="btn-action" title="Copy converted NATO text (C)">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span>Copy</span>
+                                </button>
+                                <button type="button" id="btn-favorite" class="btn-action" title="Save conversion to favourites (F)">
+                                    <i class="fa-regular fa-heart" id="icon-favorite"></i>
+                                    <span id="label-favorite">Favourite</span>
+                                </button>
+                                <button type="button" id="btn-random" class="btn-action" title="Load random callsign or code (R)">
+                                    <i class="fa-solid fa-dice"></i>
+                                    <span>Random</span>
+                                </button>
+                            </div>
+
+                            <div class="actions-right">
+                                <button type="button" id="btn-share" class="btn-action" title="Share NATO conversion">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                    <span>Share</span>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </main>
-    </div>
-    <footer class="footer has-background-primary" id="ovrd-footer">
-        <div class="content has-text-centered">
-            <div class="footer-content">
-                <div class="social-media">
-                    <a href="https://github.com/guinuxbr/" target="_blank"><i
-                            class="fab fa-github has-text-white is-size-4"></i></a>
-                    <a href="https://twitter.com/gllmarques" target="_blank"><i
-                            class="fab fa-twitter has-text-white is-size-4"></i></a>
-                    <a href="https://www.linkedin.com/in/gllmarques/" target="_blank"><i
-                            class="fab fa-linkedin has-text-white is-size-4"></i></a>
-                    <a href="https://www.instagram.com/gll.marques" target="_blank"><i
-                            class="fab fa-instagram has-text-white is-size-4"></i></a>
-                    <br>
-                    <a class="has-text-white" href="https://guinuxbr.com" target="_blank">GuinuxBR</a>
-                    <br>
-                    <a href="https://bulma.io">
-                        <img
-                            src="https://bulma.io/assets/images/made-with-bulma--dark.png"
-                            alt="Made with Bulma"
-                            width="128"
-                            height="24">
-                    </a>
-                </div>
-                <div class="theme-switcher-container">
-                    <div class="field">
-                        <div class="control">
-                            <div class="select is-small">
-                                <select id="theme-switcher">
-                                    <option value="system">System</option>
-                                    <option value="light">Light</option>
-                                    <option value="dark">Dark</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                </section>
+
+                <!-- Keyboard Quick Hint Bar -->
+                <div class="keyboard-hints-bar">
+                    <span><kbd>/</kbd> Focus Input</span>
+                    <span><kbd>C</kbd> Copy</span>
+                    <span><kbd>S</kbd> Listen</span>
+                    <span><kbd>F</kbd> Favourite</span>
+                    <span><kbd>R</kbd> Random</span>
+                    <span><kbd>A</kbd> NATO Chart</span>
+                    <span><kbd>T</kbd> Theme</span>
+                    <span><kbd>?</kbd> Shortcuts</span>
                 </div>
             </div>
-        </div>
-    </footer>
+        </main>
 
-    <!-- JavaScript -->
+        <!-- Dialog: NATO Reference Alphabet & Morse Chart -->
+        <dialog id="dialog-chart" closedby="any" aria-labelledby="chart-title">
+            <div class="modal-card">
+                <header class="modal-header">
+                    <h2 id="chart-title"><i class="fa-solid fa-table-list"></i> NATO Phonetic & Morse Alphabet</h2>
+                    <button type="button" class="btn-modal-close" data-close-dialog="dialog-chart" aria-label="Close modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </header>
+                <div class="modal-body">
+                    <table class="chart-table" aria-label="NATO Phonetic Alphabet Table">
+                        <thead>
+                            <tr>
+                                <th>Char</th>
+                                <th>Codeword</th>
+                                <th>Pronunciation</th>
+                                <th>Morse Code</th>
+                                <th>Audio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chart-table-body">
+                            <!-- Populated dynamically via script.js -->
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" class="btn-action btn-primary" data-close-dialog="dialog-chart">Close</button>
+                </footer>
+            </div>
+        </dialog>
+
+        <!-- Dialog: Saved Favourites / History -->
+        <dialog id="dialog-history" closedby="any" aria-labelledby="history-title">
+            <div class="modal-card">
+                <header class="modal-header">
+                    <h2 id="history-title"><i class="fa-solid fa-bookmark"></i> Saved Favourites</h2>
+                    <button type="button" class="btn-modal-close" data-close-dialog="dialog-history" aria-label="Close modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </header>
+                <div class="modal-body" id="history-list-container">
+                    <!-- Populated dynamically via script.js -->
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" id="btn-clear-history" class="btn-action" style="display: none; color: var(--danger);">
+                        <i class="fa-solid fa-trash-can"></i> Clear All
+                    </button>
+                    <button type="button" class="btn-action btn-primary" data-close-dialog="dialog-history">Close</button>
+                </footer>
+            </div>
+        </dialog>
+
+        <!-- Dialog: Keyboard Shortcuts -->
+        <dialog id="dialog-shortcuts" closedby="any" aria-labelledby="shortcuts-title">
+            <div class="modal-card">
+                <header class="modal-header">
+                    <h2 id="shortcuts-title"><i class="fa-solid fa-keyboard"></i> Keyboard Shortcuts</h2>
+                    <button type="button" class="btn-modal-close" data-close-dialog="dialog-shortcuts" aria-label="Close modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </header>
+                <div class="modal-body">
+                    <table class="shortcuts-table">
+                        <thead>
+                            <tr>
+                                <th>Shortcut</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><kbd>/</kbd></td>
+                                <td>Focus input box to start typing</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>C</kbd></td>
+                                <td>Copy converted NATO text to clipboard</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>S</kbd></td>
+                                <td>Listen / Stop audio speech playback</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>F</kbd></td>
+                                <td>Save conversion to favourites</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>R</kbd></td>
+                                <td>Generate random callsign or code</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>A</kbd></td>
+                                <td>Open NATO & Morse Reference Chart</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>H</kbd></td>
+                                <td>Open Saved Favourites manager</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>T</kbd></td>
+                                <td>Toggle Dark / Light theme mode</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>?</kbd></td>
+                                <td>Open this Keyboard Shortcuts guide</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Esc</kbd></td>
+                                <td>Close active modal or clear input</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" class="btn-action btn-primary" data-close-dialog="dialog-shortcuts">Got it</button>
+                </footer>
+            </div>
+        </dialog>
+
+        <!-- Floating Toast Container -->
+        <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="https://github.com/guinuxbr/nato-phonetic-generator" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://x.com/guinuxbr" target="_blank" rel="noopener noreferrer" aria-label="X Profile">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/gllmarques/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a href="https://www.instagram.com/guinuxbr" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+            <p class="footer-credits">
+                Crafted with 🛩️ by <a href="https://guinuxbr.com" target="_blank" rel="noopener noreferrer">GuinuxBR</a> • 
+                Standardised by ICAO, ITU, and NATO
+            </p>
+            <p class="footer-disclaimer">
+                <strong>Information:</strong> The NATO phonetic alphabet is officially known as the International Radiotelephony Spelling Alphabet (ICAO/ITU/IMO). It assigns codewords acrophonically to letters to minimise communication misunderstandings over radio and telephone channels.
+            </p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
     <script src="js/script.js"></script>
 </body>
 
